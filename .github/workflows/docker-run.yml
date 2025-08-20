@@ -28,14 +28,6 @@ jobs:
 
       # 4️⃣ Run Docker container
       - name: Run tests in Docker
-        run: docker run -it api-test
-
-      # 5️⃣ Optional: Save reports as artifacts
-      - name: Upload reports
-        uses: actions/upload-artifact@v3.2.2
-        with:
-          name: reports
-          path: |
-            Report/*.csv
-            Report/*.txt
-            Report/*.html
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/Report
+          docker run -v $GITHUB_WORKSPACE/Report:/app/Report api-test
