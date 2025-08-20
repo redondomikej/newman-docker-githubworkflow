@@ -31,3 +31,10 @@ jobs:
         run: |
           mkdir -p $GITHUB_WORKSPACE/Report
           docker run -v $GITHUB_WORKSPACE/Report:/app/Report api-test
+
+      # 5️⃣ Upload Reports
+      - name: Upload reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-test-reports
+          path: $GITHUB_WORKSPACE/Report
