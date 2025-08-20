@@ -1,0 +1,24 @@
+[
+  {
+    "expected_result": "PASSED",
+    "scenario": "using valid base_url and endpoint",
+    "base_url": "https://jsonplaceholder.typicode.com/",
+    "end_point": "posts",
+    "payload_Data": {
+      "title": "foo",
+      "body": "bar",
+      "userId": 1
+    }
+  },
+  {
+    "expected_result": "FAILED",
+    "scenario": "using invalid endpoint",
+    "base_url": "https://jsonplaceholder.typicode.com/",
+    "end_point": "posts1",
+    "payload_Data": {
+      "title": "foo",
+      "body": "bar",
+      "userId": 1
+    }
+  }
+]

@@ -1,0 +1,173 @@
+nasa loob ng api collection
+✅ Summary of the Postman Collection – "Post data"
+Name: Post data
+Purpose: Demonstrates how to perform a POST request in Postman using data from a data file.
+Key Features:
+Uses {{base_url}} and {{payload_Data_stringified}} as variables.
+Pre-request script converts raw JSON data (payload_Data) from a data file to string format for the body.
+Test script checks if the API response (200 or 201) matches the expected result (PASSED or FAILED from the data file).
+
+
+✅ Summary of the Postman Collection – "Get data"
+Name: Get data
+Purpose: Performs a GET request to retrieve data from an API endpoint.
+Key Features:
+Uses variables: {{base_url}} and {{end_point}}.
+No request body (typical for GET requests).
+Has a test script to:
+Check if the response status is 200 or 201.
+Compare actual result (PASSED or FAILED) with expected_result from a data file.
+Designed to be run with a CSV or JSON data file containing fields like scenario and expected_result.
+
+
+
+🔧 Functions Inside:
+1. getFormattedDateTime()
+📌 Purpose: Returns the current date and time in YYYYMMDD_HHmm format.
+🧾 Example Output: 20240715_1420
+✅ Useful for naming reports, logs, or output files with a timestamp.
+2. determineActualResult(responseStream)
+📌 Purpose: Parses the API response and determines if the result is 'PASSED' or 'FAILED'.
+🧠 Logic:
+✅ Returns 'PASSED' if:
+Response has a school_gradebooks array.
+No known error keywords found in the message.
+❌ Returns 'FAILED' if:
+Message contains known error terms like "no data found", "not found", "invalid", or "error".
+Raw response contains "request failed".
+
+
+🔧 Function: runNewmanWithReport()
+📌 Purpose:
+Runs a Postman collection using Newman.
+Compares expected vs. actual results.
+Generates a custom CSV report and an HTML report.
+
+📁 Inputs:
+collection – Postman collection JSON or file path.
+dataFile – Path to a CSV or JSON file with test data.
+reportDir – Output folder for reports.
+options (optional):
+htmlReportPath
+csvReportPath
+
+⚙️ What It Does:
+Runs Newman with the provided collection and test data.
+Loops through each test execution:
+Gets scenario and expected_result from the data file.
+Checks the actual status code (200 or 201 = passed).
+Compares actual_result to expected_result.
+Determines automation_result (PASSED/FAILED).
+Generates a CSV report with results.
+Saves the HTML report using newman-reporter-htmlextra.
+Logs pass/fail summary in the console.
+
+✅ Output:
+✅ Console logs
+📄 Custom CSV Report
+🌐 Newman HTML report
+
+
+
+✅ Summary of generateSummaryReport.js
+This file contains a reusable function that generates a summary report based on a CSV result file created from your Newman test runs.
+🔧 Function: generateSummaryReport(csvPath, summaryPath)
+📌 Purpose:
+Reads a CSV report of test results.
+Counts total, passed, and failed test cases.
+Lists failed scenarios by iteration and name.
+Writes a clear, readable text summary report.
+
+📥 Inputs:
+csvPath: Path to the CSV file containing test results.
+summaryPath: Output path for the generated .txt summary.
+
+📄 Output Example:
+📄 Automation Summary Report
+Generated At     : 7/15/2025, 3:30:00 PM
+CSV Source       : ../report/custom_report.csv
+------------------------------------
+✅ Total APIs Tested     : 10
+✅ Passed                : 8
+❌ Failed                : 2
+------------------------------------
+❌ Failed Scenarios:
+  - Iteration 3: Login fails with wrong credentials
+  - Iteration 7: Missing token returns error
+
+🧪 End of Report.
+💡 Features:
+Auto-detects failures from the CSV.
+Formats human-readable timestamp (localized to Asia/Manila).
+Useful for quick QA report generation after test runs.
+
+
+
+✅ Summary of Your Test Suite Script
+This is your main runner script for executing a Postman test suite using Newman, generating both a custom CSV, an HTML report, and a text summary report.
+
+📌 What This Script Does (Step-by-Step)
+Loads utilities:
+
+runNewmanWithReport: Runs the Postman collection and creates reports.
+generateSummaryReport: Analyzes the CSV and generates a readable summary.
+getFormattedDateTime: Adds a timestamp to filenames.
+
+Defines key paths:
+Collection: ../api_collection/Get data.json
+Data file: ../datafile/Get data.json
+Output folder: ../Report/
+
+Outputs:
+HTML Report: Get_data_YYYYMMDD_HHmm.html
+CSV Report: Get_data_YYYYMMDD_HHmm.csv
+Summary Text: Get_data_YYYYMMDD_HHmm_summary.txt
+
+Runs everything:
+Calls runNewmanWithReport()
+
+Then calls generateSummaryReport() after Newman finishes
+✅ Output (per run):
+📄 HTML Report: Visual report (via htmlextra)
+📊 CSV Report: Custom result summary
+🧾 Summary TXT: Human-readable test summary
+
+💡 Ideal For:
+✅ CI/CD pipelines
+✅ Manual QA regression testing
+✅ Nightly API test runs
+
+
+
+✅ Summary of Your package.json
+This file defines your Node.js project configuration for running Newman-based API tests and generating reports.
+📛 Project Info
+Name: jca-lsgh-migration
+
+Version: 1.0.0
+
+🏃‍♂️ NPM Scripts
+json
+Copy
+Edit
+"scripts": {
+  "run_getData": "node scripts/run-get-data.js",
+  "run_postData": "node scripts/run-post-data.js"
+}
+✅ npm run run_getData – Runs the Get data test suite.
+✅ npm run run_postData – Runs the Post data test suite.
+
+📦 Dependencies
+Package	Purpose
+newman	CLI tool to run Postman collections
+newman-reporter-htmlextra	Generates a beautiful HTML report
+newman-reporter-csv	Adds support for basic CSV report output
+csv-writer	Generates custom CSV reports programmatically
+path	Node.js path utility (optional—already built-in with Node)
+
+📂 Directory Assumptions (based on your scripts)
+/scripts/run-get-data.js
+/scripts/run-post-data.js
+/api_collection/
+/datafile/
+/Report/

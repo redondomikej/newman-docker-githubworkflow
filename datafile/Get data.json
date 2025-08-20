@@ -1,0 +1,14 @@
+[
+  {
+    "expected_result": "PASSED",
+    "scenario": "using valid base_url and endpoint",
+    "base_url": "https://jsonplaceholder.typicode.com/",
+    "end_point": "users/1"
+  },
+  {
+    "expected_result": "FAILED",
+    "scenario": "using invalid base_url and endpoint",
+    "base_url": "https://jsonplaceholder.typicode.com/",
+    "end_point": "users/abc"
+  }
+]
