@@ -6,6 +6,8 @@ on:
     branches:
       - main
   workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'  # every hour
 
 jobs:
   run-tests:
@@ -30,7 +32,7 @@ jobs:
 
       # 5️⃣ Optional: Save reports as artifacts
       - name: Upload reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.2.2
         with:
           name: reports
           path: |
